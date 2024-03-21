@@ -1,0 +1,551 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "CdkCy2024EventsStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "CdkCy2024EventsStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "CdkCy2024EventsStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "CdkCy2024EventsStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/8ee928d9db200ea1ed490e29e8403a1abbb49976d103f8bb18deb349799627b5.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "CdkCy2024EventsStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "CdkCy2024EventsStack.assets"
+      ],
+      "metadata": {
+        "/CdkCy2024EventsStack/ImageBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImageBucket97210811"
+          }
+        ],
+        "/CdkCy2024EventsStack/ImageBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImageBucketPolicy9E7B0384"
+          }
+        ],
+        "/CdkCy2024EventsStack/ImageBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImageBucketAutoDeleteObjectsCustomResource99A1E17B"
+          }
+        ],
+        "/CdkCy2024EventsStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/CdkCy2024EventsStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/CdkCy2024EventsStack/tableEvents": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "tableEvents6B59473E"
+            }
+          }
+        ],
+        "/CdkCy2024EventsStack/tableEvents/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tableEvents6B59473E"
+          }
+        ],
+        "/CdkCy2024EventsStack/getEvents/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getEventsServiceRole583AF81E"
+          }
+        ],
+        "/CdkCy2024EventsStack/getEvents/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getEventsServiceRoleDefaultPolicyF5AA2335"
+          }
+        ],
+        "/CdkCy2024EventsStack/getEvents/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getEvents5D454394"
+          }
+        ],
+        "/CdkCy2024EventsStack/postEvents/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "postEventsServiceRole76EDD642"
+          }
+        ],
+        "/CdkCy2024EventsStack/postEvents/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "postEventsServiceRoleDefaultPolicy8A883A65"
+          }
+        ],
+        "/CdkCy2024EventsStack/postEvents/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "postEvents2B61FD8E"
+          }
+        ],
+        "/CdkCy2024EventsStack/inscriptionParticipants/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "inscriptionParticipantsServiceRole29AA3F14"
+          }
+        ],
+        "/CdkCy2024EventsStack/inscriptionParticipants/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "inscriptionParticipantsServiceRoleDefaultPolicyBF554B62"
+          }
+        ],
+        "/CdkCy2024EventsStack/inscriptionParticipants/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "inscriptionParticipants3B779103"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPI24BF57E1"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIDeploymentEE4DB9A4f6f0715cb966b86eb941669909aa588b"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIDeploymentStageprodD546F7D2"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIEndpoint1697292B"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/events/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIevents995BD27D"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/events/get/ApiPermission.CdkCy2024EventsStackeventsAPI01600A34.GET..events": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIeventsgetApiPermissionCdkCy2024EventsStackeventsAPI01600A34GETevents033A0716"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/events/get/ApiPermission.Test.CdkCy2024EventsStackeventsAPI01600A34.GET..events": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIeventsgetApiPermissionTestCdkCy2024EventsStackeventsAPI01600A34GETevents039D6494"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/events/get/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIeventsgetD97AE8A0"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/events/post/ApiPermission.CdkCy2024EventsStackeventsAPI01600A34.POST..events": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIeventspostApiPermissionCdkCy2024EventsStackeventsAPI01600A34POSTevents0482BCBD"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/events/post/ApiPermission.Test.CdkCy2024EventsStackeventsAPI01600A34.POST..events": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIeventspostApiPermissionTestCdkCy2024EventsStackeventsAPI01600A34POSTevents1D69AB34"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/events/post/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIeventspostD48AB0E1"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/events/put/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIeventsput8811485A"
+          }
+        ],
+        "/CdkCy2024EventsStack/eventsAPI/Default/participants/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "eventsAPIparticipants905866A9"
+          }
+        ],
+        "/CdkCy2024EventsStack/tableStocks": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "tableStocks9829135C"
+            }
+          }
+        ],
+        "/CdkCy2024EventsStack/tableStocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tableStocks9829135C"
+          }
+        ],
+        "/CdkCy2024EventsStack/getStocks/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getStocksServiceRoleBB38D802"
+          }
+        ],
+        "/CdkCy2024EventsStack/getStocks/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getStocksServiceRoleDefaultPolicy666B4A06"
+          }
+        ],
+        "/CdkCy2024EventsStack/getStocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getStocks42194857"
+          }
+        ],
+        "/CdkCy2024EventsStack/postStocks/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "postStocksServiceRole0D3597CD"
+          }
+        ],
+        "/CdkCy2024EventsStack/postStocks/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "postStocksServiceRoleDefaultPolicy7B475EA8"
+          }
+        ],
+        "/CdkCy2024EventsStack/postStocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "postStocksDBA8F0FE"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIF274DF95"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIDeploymentDFCFF1AEbdf7d62a4657c4f85bfd7cd670dd001a"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIDeploymentStageprod7FE45389"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIEndpoint18C4C69F"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/get/ApiPermission.CdkCy2024EventsStackstocksAPIB0FEE71B.GET..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIgetApiPermissionCdkCy2024EventsStackstocksAPIB0FEE71BGET18B489AA"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/get/ApiPermission.Test.CdkCy2024EventsStackstocksAPIB0FEE71B.GET..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIgetApiPermissionTestCdkCy2024EventsStackstocksAPIB0FEE71BGETB7ED8D11"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/get/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIgetA43D9921"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/post/ApiPermission.CdkCy2024EventsStackstocksAPIB0FEE71B.POST..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIpostApiPermissionCdkCy2024EventsStackstocksAPIB0FEE71BPOST3AFC47B3"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/post/ApiPermission.Test.CdkCy2024EventsStackstocksAPIB0FEE71B.POST..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIpostApiPermissionTestCdkCy2024EventsStackstocksAPIB0FEE71BPOST4B063EB5"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/post/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIpostF96BC953"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/stocks/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIstocksC002A04E"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/stocks/get/ApiPermission.CdkCy2024EventsStackstocksAPIB0FEE71B.GET..stocks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIstocksgetApiPermissionCdkCy2024EventsStackstocksAPIB0FEE71BGETstocks4DFFC9A9"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/stocks/get/ApiPermission.Test.CdkCy2024EventsStackstocksAPIB0FEE71B.GET..stocks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIstocksgetApiPermissionTestCdkCy2024EventsStackstocksAPIB0FEE71BGETstocksFBB8E719"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/stocks/get/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIstocksget1E77432E"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/stocks/post/ApiPermission.CdkCy2024EventsStackstocksAPIB0FEE71B.POST..stocks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIstockspostApiPermissionCdkCy2024EventsStackstocksAPIB0FEE71BPOSTstocks2D09B049"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/stocks/post/ApiPermission.Test.CdkCy2024EventsStackstocksAPIB0FEE71B.POST..stocks": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIstockspostApiPermissionTestCdkCy2024EventsStackstocksAPIB0FEE71BPOSTstocks4D377DF3"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/stocks/post/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIstockspostC6261CEE"
+          }
+        ],
+        "/CdkCy2024EventsStack/stocksAPI/Default/stocks/put/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "stocksAPIstocksput6EF50FA5"
+          }
+        ],
+        "/CdkCy2024EventsStack/tableUsers": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "tableUsers4002E7D4"
+            }
+          }
+        ],
+        "/CdkCy2024EventsStack/tableUsers/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tableUsers4002E7D4"
+          }
+        ],
+        "/CdkCy2024EventsStack/UserPool/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPool6BA7E5F2"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersLambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersLambdaServiceRole5889B047"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersLambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersLambdaServiceRoleDefaultPolicyEC2A02AF"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersLambdaB774E0F9"
+          }
+        ],
+        "/CdkCy2024EventsStack/UserPoolClient/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserPoolClient2F5918F7"
+          }
+        ],
+        "/CdkCy2024EventsStack/IdentityPool": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityPool"
+          }
+        ],
+        "/CdkCy2024EventsStack/PublicRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PublicRole008A4592"
+          }
+        ],
+        "/CdkCy2024EventsStack/UserRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UserRoleB7C3739B"
+          }
+        ],
+        "/CdkCy2024EventsStack/OrganizerRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OrganizerRole37593A25"
+          }
+        ],
+        "/CdkCy2024EventsStack/AdminRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AdminRole38563C57"
+          }
+        ],
+        "/CdkCy2024EventsStack/IdentityPoolRoles": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "IdentityPoolRoles"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPI0D36C576"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIDeployment163F748415758b192f3dddc2fefa0faafc2df23a"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIDeploymentStageprodE56F296C"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIEndpointE6917C21"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Default/user/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIuser9F5E1F2B"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Default/user/get/ApiPermission.CdkCy2024EventsStackusersAPI4BF2BCE2.GET..user": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIusergetApiPermissionCdkCy2024EventsStackusersAPI4BF2BCE2GETuser470F838D"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Default/user/get/ApiPermission.Test.CdkCy2024EventsStackusersAPI4BF2BCE2.GET..user": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIusergetApiPermissionTestCdkCy2024EventsStackusersAPI4BF2BCE2GETuserA20CE057"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Default/user/get/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIuserget4DCDF442"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Default/user/post/ApiPermission.CdkCy2024EventsStackusersAPI4BF2BCE2.POST..user": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIuserpostApiPermissionCdkCy2024EventsStackusersAPI4BF2BCE2POSTuser893C5DF5"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Default/user/post/ApiPermission.Test.CdkCy2024EventsStackusersAPI4BF2BCE2.POST..user": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIuserpostApiPermissionTestCdkCy2024EventsStackusersAPI4BF2BCE2POSTuser8CFA040A"
+          }
+        ],
+        "/CdkCy2024EventsStack/usersAPI/Default/user/post/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "usersAPIuserpost5F311CC7"
+          }
+        ],
+        "/CdkCy2024EventsStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/CdkCy2024EventsStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/CdkCy2024EventsStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/CdkCy2024EventsStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "CdkCy2024EventsStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

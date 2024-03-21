@@ -1,0 +1,1981 @@
+{
+ "Resources": {
+  "tableUsers4002E7D4": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "user-id",
+      "AttributeType": "S"
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "user-id",
+      "KeyType": "HASH"
+     }
+    ],
+    "ProvisionedThroughput": {
+     "ReadCapacityUnits": 1,
+     "WriteCapacityUnits": 1
+    },
+    "TableName": "CY-Emma-Feast-Users"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/tableUsers/Resource"
+   }
+  },
+  "UserPool6BA7E5F2": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_phone_number",
+       "Priority": 1
+      },
+      {
+       "Name": "verified_email",
+       "Priority": 2
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": true
+    },
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/UserPool/Resource"
+   }
+  },
+  "UserPoolUserPoolClient40176907": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AllowedOAuthFlows": [
+     "implicit",
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "profile",
+     "phone",
+     "email",
+     "openid",
+     "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+     "https://example.com"
+    ],
+    "SupportedIdentityProviders": [
+     "COGNITO"
+    ],
+    "UserPoolId": {
+     "Ref": "UserPool6BA7E5F2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/UserPool/UserPoolClient/Resource"
+   }
+  },
+  "IdentityPool": {
+   "Type": "AWS::Cognito::IdentityPool",
+   "Properties": {
+    "AllowUnauthenticatedIdentities": false,
+    "CognitoIdentityProviders": [
+     {
+      "ClientId": {
+       "Ref": "UserPoolUserPoolClient40176907"
+      },
+      "ProviderName": {
+       "Fn::GetAtt": [
+        "UserPool6BA7E5F2",
+        "ProviderName"
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/IdentityPool"
+   }
+  },
+  "PublicRole008A4592": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/PublicRole/Resource"
+   }
+  },
+  "PublicRoleDefaultPolicyA9D2B06E": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "tableUsers4002E7D4",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "PublicRoleDefaultPolicyA9D2B06E",
+    "Roles": [
+     {
+      "Ref": "PublicRole008A4592"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/PublicRole/DefaultPolicy/Resource"
+   }
+  },
+  "UserRoleB7C3739B": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/UserRole/Resource"
+   }
+  },
+  "UserRoleDefaultPolicyBC5E062B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "tableUsers4002E7D4",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "UserRoleDefaultPolicyBC5E062B",
+    "Roles": [
+     {
+      "Ref": "UserRoleB7C3739B"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/UserRole/DefaultPolicy/Resource"
+   }
+  },
+  "OrganizerRole37593A25": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/OrganizerRole/Resource"
+   }
+  },
+  "OrganizerRoleDefaultPolicy2E8A8C55": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "tableUsers4002E7D4",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "OrganizerRoleDefaultPolicy2E8A8C55",
+    "Roles": [
+     {
+      "Ref": "OrganizerRole37593A25"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/OrganizerRole/DefaultPolicy/Resource"
+   }
+  },
+  "AdminRole38563C57": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/AdminRole/Resource"
+   }
+  },
+  "AdminRoleDefaultPolicy1C2AB961": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "tableUsers4002E7D4",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AdminRoleDefaultPolicy1C2AB961",
+    "Roles": [
+     {
+      "Ref": "AdminRole38563C57"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/AdminRole/DefaultPolicy/Resource"
+   }
+  },
+  "IdentityPoolRoles": {
+   "Type": "AWS::Cognito::IdentityPoolRoleAttachment",
+   "Properties": {
+    "IdentityPoolId": {
+     "Ref": "IdentityPool"
+    },
+    "Roles": {
+     "unauthenticated": {
+      "Fn::GetAtt": [
+       "PublicRole008A4592",
+       "Arn"
+      ]
+     },
+     "authenticatedUser": {
+      "Fn::GetAtt": [
+       "UserRoleB7C3739B",
+       "Arn"
+      ]
+     },
+     "authenticatedOrganizer": {
+      "Fn::GetAtt": [
+       "OrganizerRole37593A25",
+       "Arn"
+      ]
+     },
+     "authenticatedAdmin": {
+      "Fn::GetAtt": [
+       "AdminRole38563C57",
+       "Arn"
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/IdentityPoolRoles"
+   }
+  },
+  "publicLambda272A959D": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE": {
+       "Ref": "tableUsers4002E7D4"
+      },
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "PublicRole008A4592",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "PublicRoleDefaultPolicyA9D2B06E",
+    "PublicRole008A4592"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/publicLambda/Resource",
+    "aws:asset:path": "asset.e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "userLambdaC28F8AE0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE": {
+       "Ref": "tableUsers4002E7D4"
+      },
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "UserRoleB7C3739B",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "UserRoleDefaultPolicyBC5E062B",
+    "UserRoleB7C3739B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/userLambda/Resource",
+    "aws:asset:path": "asset.e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "organizerLambda81421E26": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE": {
+       "Ref": "tableUsers4002E7D4"
+      },
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "OrganizerRole37593A25",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "OrganizerRoleDefaultPolicy2E8A8C55",
+    "OrganizerRole37593A25"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/organizerLambda/Resource",
+    "aws:asset:path": "asset.e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "adminLambdaA81D060C": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE": {
+       "Ref": "tableUsers4002E7D4"
+      },
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "MemorySize": 128,
+    "Role": {
+     "Fn::GetAtt": [
+      "AdminRole38563C57",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "AdminRoleDefaultPolicy1C2AB961",
+    "AdminRole38563C57"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/adminLambda/Resource",
+    "aws:asset:path": "asset.e0690592dd9efac22e9fedd9ad94ef31d0e6b404bbf9142b33bba636f8bd9287",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "usersAPI0D36C576": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "Gestion des utilisateurs depuis le CY Feast",
+    "Name": "Accéder aux utilisateurs"
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Resource"
+   }
+  },
+  "usersAPIDeployment163F748415f7f1552d395a5243a58ba9cee9f66f": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Gestion des utilisateurs depuis le CY Feast",
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "DependsOn": [
+    "usersAPIadminget19ABAE54",
+    "usersAPIadminpost5CFA9680",
+    "usersAPIadminC18E3719",
+    "usersAPIgetA7DA071F",
+    "usersAPIorganizerget76F4BD58",
+    "usersAPIorganizerpostCA132DD3",
+    "usersAPIorganizerFC6744E9",
+    "usersAPIpostCC3B2227",
+    "usersAPIuserget4DCDF442",
+    "usersAPIuserpost5F311CC7",
+    "usersAPIuser9F5E1F2B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Deployment/Resource"
+   }
+  },
+  "usersAPIDeploymentStageprodE56F296C": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "usersAPIDeployment163F748415f7f1552d395a5243a58ba9cee9f66f"
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/DeploymentStage.prod/Resource"
+   }
+  },
+  "usersAPIgetApiPermissionCdkCy2024UsersStackusersAPIE508771FGET0F4F8AE5": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "publicLambda272A959D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/",
+       {
+        "Ref": "usersAPIDeploymentStageprodE56F296C"
+       },
+       "/GET/"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/get/ApiPermission.CdkCy2024UsersStackusersAPIE508771F.GET.."
+   }
+  },
+  "usersAPIgetApiPermissionTestCdkCy2024UsersStackusersAPIE508771FGETBD7D23CF": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "publicLambda272A959D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/test-invoke-stage/GET/"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/get/ApiPermission.Test.CdkCy2024UsersStackusersAPIE508771F.GET.."
+   }
+  },
+  "usersAPIgetA7DA071F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "publicLambda272A959D",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "usersAPI0D36C576",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/get/Resource"
+   }
+  },
+  "usersAPIpostApiPermissionCdkCy2024UsersStackusersAPIE508771FPOST5B731ABC": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "publicLambda272A959D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/",
+       {
+        "Ref": "usersAPIDeploymentStageprodE56F296C"
+       },
+       "/POST/"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/post/ApiPermission.CdkCy2024UsersStackusersAPIE508771F.POST.."
+   }
+  },
+  "usersAPIpostApiPermissionTestCdkCy2024UsersStackusersAPIE508771FPOSTE2F231BC": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "publicLambda272A959D",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/test-invoke-stage/POST/"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/post/ApiPermission.Test.CdkCy2024UsersStackusersAPIE508771F.POST.."
+   }
+  },
+  "usersAPIpostCC3B2227": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "publicLambda272A959D",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Fn::GetAtt": [
+      "usersAPI0D36C576",
+      "RootResourceId"
+     ]
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/post/Resource"
+   }
+  },
+  "usersAPIuser9F5E1F2B": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "usersAPI0D36C576",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "user",
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/user/Resource"
+   }
+  },
+  "usersAPIusergetApiPermissionCdkCy2024UsersStackusersAPIE508771FGETuserEAB5877A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "userLambdaC28F8AE0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/",
+       {
+        "Ref": "usersAPIDeploymentStageprodE56F296C"
+       },
+       "/GET/user"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/user/get/ApiPermission.CdkCy2024UsersStackusersAPIE508771F.GET..user"
+   }
+  },
+  "usersAPIusergetApiPermissionTestCdkCy2024UsersStackusersAPIE508771FGETuser7F1EA2AD": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "userLambdaC28F8AE0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/test-invoke-stage/GET/user"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/user/get/ApiPermission.Test.CdkCy2024UsersStackusersAPIE508771F.GET..user"
+   }
+  },
+  "usersAPIuserget4DCDF442": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "userLambdaC28F8AE0",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "usersAPIuser9F5E1F2B"
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/user/get/Resource"
+   }
+  },
+  "usersAPIuserpostApiPermissionCdkCy2024UsersStackusersAPIE508771FPOSTuser55635FCE": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "userLambdaC28F8AE0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/",
+       {
+        "Ref": "usersAPIDeploymentStageprodE56F296C"
+       },
+       "/POST/user"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/user/post/ApiPermission.CdkCy2024UsersStackusersAPIE508771F.POST..user"
+   }
+  },
+  "usersAPIuserpostApiPermissionTestCdkCy2024UsersStackusersAPIE508771FPOSTuser15A719B6": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "userLambdaC28F8AE0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/test-invoke-stage/POST/user"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/user/post/ApiPermission.Test.CdkCy2024UsersStackusersAPIE508771F.POST..user"
+   }
+  },
+  "usersAPIuserpost5F311CC7": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "userLambdaC28F8AE0",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "usersAPIuser9F5E1F2B"
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/user/post/Resource"
+   }
+  },
+  "usersAPIorganizerFC6744E9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "usersAPI0D36C576",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "organizer",
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/organizer/Resource"
+   }
+  },
+  "usersAPIorganizergetApiPermissionCdkCy2024UsersStackusersAPIE508771FGETorganizer37DF238E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "organizerLambda81421E26",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/",
+       {
+        "Ref": "usersAPIDeploymentStageprodE56F296C"
+       },
+       "/GET/organizer"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/organizer/get/ApiPermission.CdkCy2024UsersStackusersAPIE508771F.GET..organizer"
+   }
+  },
+  "usersAPIorganizergetApiPermissionTestCdkCy2024UsersStackusersAPIE508771FGETorganizer0EBF0C1C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "organizerLambda81421E26",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/test-invoke-stage/GET/organizer"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/organizer/get/ApiPermission.Test.CdkCy2024UsersStackusersAPIE508771F.GET..organizer"
+   }
+  },
+  "usersAPIorganizerget76F4BD58": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "organizerLambda81421E26",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "usersAPIorganizerFC6744E9"
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/organizer/get/Resource"
+   }
+  },
+  "usersAPIorganizerpostApiPermissionCdkCy2024UsersStackusersAPIE508771FPOSTorganizerAB5545F7": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "organizerLambda81421E26",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/",
+       {
+        "Ref": "usersAPIDeploymentStageprodE56F296C"
+       },
+       "/POST/organizer"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/organizer/post/ApiPermission.CdkCy2024UsersStackusersAPIE508771F.POST..organizer"
+   }
+  },
+  "usersAPIorganizerpostApiPermissionTestCdkCy2024UsersStackusersAPIE508771FPOSTorganizerD25A049A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "organizerLambda81421E26",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/test-invoke-stage/POST/organizer"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/organizer/post/ApiPermission.Test.CdkCy2024UsersStackusersAPIE508771F.POST..organizer"
+   }
+  },
+  "usersAPIorganizerpostCA132DD3": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "organizerLambda81421E26",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "usersAPIorganizerFC6744E9"
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/organizer/post/Resource"
+   }
+  },
+  "usersAPIadminC18E3719": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "usersAPI0D36C576",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "admin",
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/admin/Resource"
+   }
+  },
+  "usersAPIadmingetApiPermissionCdkCy2024UsersStackusersAPIE508771FGETadminB498A971": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "adminLambdaA81D060C",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/",
+       {
+        "Ref": "usersAPIDeploymentStageprodE56F296C"
+       },
+       "/GET/admin"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/admin/get/ApiPermission.CdkCy2024UsersStackusersAPIE508771F.GET..admin"
+   }
+  },
+  "usersAPIadmingetApiPermissionTestCdkCy2024UsersStackusersAPIE508771FGETadmin18DD4989": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "adminLambdaA81D060C",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/test-invoke-stage/GET/admin"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/admin/get/ApiPermission.Test.CdkCy2024UsersStackusersAPIE508771F.GET..admin"
+   }
+  },
+  "usersAPIadminget19ABAE54": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "adminLambdaA81D060C",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "usersAPIadminC18E3719"
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/admin/get/Resource"
+   }
+  },
+  "usersAPIadminpostApiPermissionCdkCy2024UsersStackusersAPIE508771FPOSTadminB6E7762E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "adminLambdaA81D060C",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/",
+       {
+        "Ref": "usersAPIDeploymentStageprodE56F296C"
+       },
+       "/POST/admin"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/admin/post/ApiPermission.CdkCy2024UsersStackusersAPIE508771F.POST..admin"
+   }
+  },
+  "usersAPIadminpostApiPermissionTestCdkCy2024UsersStackusersAPIE508771FPOSTadminFE4DD6F8": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "adminLambdaA81D060C",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "usersAPI0D36C576"
+       },
+       "/test-invoke-stage/POST/admin"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/admin/post/ApiPermission.Test.CdkCy2024UsersStackusersAPIE508771F.POST..admin"
+   }
+  },
+  "usersAPIadminpost5CFA9680": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "adminLambdaA81D060C",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "usersAPIadminC18E3719"
+    },
+    "RestApiId": {
+     "Ref": "usersAPI0D36C576"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/usersAPI/Default/admin/post/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02Q0W7CMAxFv2XvIaPwBdBp0h62obI9IzcxxZAmVe0OVVX/fUoo0Kd77Gs7t13pbL3Uyxe48sLYy8JRqYe9gLkouPJhsL2HOthSDz9QOlT50ScYlQmVJwl6+GVsdyG46D34Drkj9DK3np0Pi15I+vvyvC6Cw40ImFONXkZFUOshNuNg0l1wZPpY3mhUDurSwsEHi2fWX0neO2+Egle8PgAzCutNFMVrve3MBWULjNOqHvKjf2zEy9jWxEzBjwoaqkDwCr0eCmTZNJSyTPiGjQt9PX3arNoLVCn1DQrk0LUG07OfKKdgoznR3Z0uJx7HZztlj4fIV3Hmu5Omk/l05Dx4S5JSx5+hz/z6t1rqLNPZy5mJFm3nhWrUxU3/Ae9GvbsFAgAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "CdkCy2024UsersStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "usersAPIEndpointE6917C21": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "usersAPI0D36C576"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "usersAPIDeploymentStageprodE56F296C"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
