@@ -1,8 +1,12 @@
-# Welcome to your CDK TypeScript project
+# Welcome to my CDK TypeScript project  (Emmanuella NGOUGUE DJEUFA)
 
-This is a blank project for CDK development with TypeScript.
+L'architecture implémentée est celle qui se trouve dans le dossier lib/Image_Infrastructure/Architecture_du_projet.vpd.png
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+Une stack finallement a été implémenté pour la gestion des événements, des stocks et des utilisateurs.
+La partie implémentée sur le cognito est en rapport avec les rôles d'utilisateurs et le bucket permet de gérer les images.
+
+D'après le design d'architecture du départ, 6 lambdas et 3 tables ont été crées en plus du bucket.
+
 
 ## Useful commands
 
