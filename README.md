@@ -43,7 +43,7 @@ The architecture enables event handling, data operations, and authenticated acce
 - Node.js (16+ recommended)
 - AWS CLI configured (`aws configure`)
 - AWS CDK installed globally:
-  ```bash
+```bash
   npm install -g aws-cdk
 ````
 
